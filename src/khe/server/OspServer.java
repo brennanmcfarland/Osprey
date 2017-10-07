@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.BufferedReader;
-import java.util.ArrayList;
 
 /**
  * This class will handle the server operations for Osprey.
@@ -37,10 +36,12 @@ public class OspServer {
         // Read a text file for recipients in form of <email>\n<email>\n...
         String[] emailRecip = null;
         try {
-            emailRecip = recipsFromFile();
+            BufferedReader recipFile = new BufferedReader(new FileReader(
+                    "src/khe/server/recip.txt"));
+            emailRecip = recipFile.lines().toArray(String[]::new);
         }
         catch (FileNotFoundException e) {
-            System.err.println("Recipients file not found");
+            System.out.println("Recipients file not found");
             System.exit(1);
         }
 
@@ -62,40 +63,14 @@ public class OspServer {
             Socket clientSocket = null;
 
             try {
-                System.out.println("Watching, waiting, commiserating");
                 clientSocket = serverSocket.accept();
             }
             catch (IOException r) {
                 System.exit(1);
             }
 
-            for (String recip : emailRecip)
-                System.out.println(recip);
-
             OspServerChick connection = new OspServerChick(clientSocket, sleepTimer, emailRecip);
             connection.start();
         }
-    }
-
-    private static String[] recipsFromFile() throws FileNotFoundException {
-        BufferedReader file = new BufferedReader(new FileReader(
-                "/home/elopez/Documents/OspreyDependencies/recip.txt"));
-
-        ArrayList<String> recipLines = new ArrayList<>();
-        String[] q;
-
-        try {
-            String address;
-            while ((address = file.readLine()) != null) {
-                recipLines.add(address);
-            }
-        }
-        catch (IOException e ) {
-            System.out.println(e.getMessage());
-        }
-
-        q = new String[recipLines.size()];
-
-        return recipLines.toArray(q);
     }
 }
