@@ -63,6 +63,7 @@ public class OspServer {
             Socket clientSocket = null;
 
             try {
+                System.out.println("Listening");
                 clientSocket = serverSocket.accept();
             }
             catch (IOException r) {
