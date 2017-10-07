@@ -13,19 +13,6 @@ import java.io.BufferedReader;
  *
  */
 public class OspServer {
-    /* Create and bind sockets to listen for the signal
-       When it gets the signal, checks if in SHLEEP mode
-       If not in SHLEEP, send an email to a configured address */
-
-    // Server behavior
-    private int portNumber;
-    private ServerSocket serverSocket;
-    private Socket clientSocket;
-
-    // Email behavior
-    private int sleepTimer;
-    private String[] emailRecip;    // This should be read from config file
-
 
     public static void main(String[] args) {
 
@@ -46,6 +33,17 @@ public class OspServer {
         int portNumber = Integer.parseInt(args[0]);
         int sleepTimer = Integer.parseInt(args[1]);
 
+        // Read a text file for recipients in form of <email>\n<email>\n...
+        String[] emailRecip = null;
+        try {
+            BufferedReader recipFile = new BufferedReader(new FileReader(
+                    "~/Documents/OspreyDependencies/recip.txt"));
+            emailRecip = recipFile.lines().toArray(String[]::new);
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("Recipients file not found");
+            System.exit(1);
+        }
 
         ServerSocket serverSocket = null;
         try {
@@ -55,17 +53,6 @@ public class OspServer {
             System.exit(1);
         }
 
-
-        // Read a text file for recipients in form of <email>\n<email>\n...
-        String[] emailRecip = null;
-        try {
-            BufferedReader recipFile = new BufferedReader(new FileReader("/recip.txt"));
-            emailRecip = recipFile.lines().toArray(String[]::new);
-        }
-        catch (FileNotFoundException e) {
-            System.out.println("Recipients file not found");
-            System.exit(1);
-        }
 
 
         ////////////////////
