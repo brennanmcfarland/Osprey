@@ -36,39 +36,43 @@ public class OspServer {
             System.exit(1);
         }
 
-        ServerSocket serverSocket;
-        Socket clientSocket;
+        ServerSocket serverSocket = null;
 
         int portNumber = Integer.parseInt(args[0]);
         int sleepTimer = Integer.parseInt(args[1]);
 
 
         // Keep server running
+
+        String[] emailRecip;
+
+        try {
+            serverSocket = new ServerSocket(portNumber);
+        }
+        catch (IOException q) {
+            System.exit(1);
+        }
+
+
+        // Read a text file for recipients in form of <email>\n<email>\n...
+
+
+
         while (true) {
-            String[] emailRecip;
+            Socket clientSocket = null;
 
             try {
-                serverSocket = new ServerSocket(portNumber);
-                portNumber = portNumber;
-                clientSocket = serverSocket.accept();    // Waits until a connection is made
+                clientSocket = serverSocket.accept();
             }
-            catch (IOException q) {
+            catch (IOException r) {
                 System.exit(1);
             }
 
-
+            OspServerChick connection = new OspServerChick(clientSocket, sleepTimer, emailRecip);
+            connection.start();
 
             // After the connection is established and the socket receives a signal
             // Send email to configured recipients to tell them to shut up
-
-
-            // Avoid spamming emails
-            try {
-                Thread.sleep(sleepTimer * 1000 * 60);
-            }
-            catch (InterruptedException e) {
-                System.out.println("Thread interrupted!");
-            }
         }
 
 
