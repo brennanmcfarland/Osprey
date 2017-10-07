@@ -1,9 +1,12 @@
 package khe.server;
 
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.io.BufferedReader;
 
 /**
  * This class will handle the server operations for Osprey.
@@ -36,16 +39,15 @@ public class OspServer {
             System.exit(1);
         }
 
-        ServerSocket serverSocket = null;
+        //////////////////
+        /* SERVER SETUP */
+        //////////////////
 
         int portNumber = Integer.parseInt(args[0]);
         int sleepTimer = Integer.parseInt(args[1]);
 
 
-        // Keep server running
-
-        String[] emailRecip;
-
+        ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(portNumber);
         }
@@ -55,8 +57,20 @@ public class OspServer {
 
 
         // Read a text file for recipients in form of <email>\n<email>\n...
+        String[] emailRecip = null;
+        try {
+            BufferedReader recipFile = new BufferedReader(new FileReader("/recip.txt"));
+            emailRecip = recipFile.lines().toArray(String[]::new);
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("Recipients file not found");
+            System.exit(1);
+        }
 
 
+        ////////////////////
+        /* RUNNING SERVER */
+        ////////////////////
 
         while (true) {
             Socket clientSocket = null;
@@ -70,13 +84,6 @@ public class OspServer {
 
             OspServerChick connection = new OspServerChick(clientSocket, sleepTimer, emailRecip);
             connection.start();
-
-            // After the connection is established and the socket receives a signal
-            // Send email to configured recipients to tell them to shut up
         }
-
-
-
-
     }
 }
