@@ -37,7 +37,7 @@ public class OspServer {
         String[] emailRecip = null;
         try {
             BufferedReader recipFile = new BufferedReader(new FileReader(
-                    "~/Documents/OspreyDependencies/recip.txt"));
+                    "src/khe/server/recip.txt"));
             emailRecip = recipFile.lines().toArray(String[]::new);
         }
         catch (FileNotFoundException e) {
