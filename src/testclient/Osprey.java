@@ -24,10 +24,6 @@ public class Osprey {
             System.err.println(e.getMessage());
             System.exit(1);
         }
-
-
-
-
     }
 
 

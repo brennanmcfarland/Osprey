@@ -21,22 +21,33 @@ public class OspServerChick extends Thread {
         // Needs to send an email to
 
         String from = "ei.lopez197@gmail.com";
-        String host = "localhost";
-        Properties properties = System.getProperties();
-        properties.setProperty("mail.smtp.host", host);
-        Session session = Session.getDefaultInstance(properties);
+        Properties props = new Properties();
+
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication("juandolar6@gmail.com", "osprey123");
+                    }
+                });
 
 
         try {
             MimeMessage message = new MimeMessage(session);
 
             message.setFrom(new InternetAddress((from)));
-            message.setRecipients(Message.RecipientType.TO, recipientAddresses(recipients));
+            message.addRecipients(Message.RecipientType.TO, recipientAddresses(recipients));
             message.setSubject("Noise levels beyond acceptable.");
             message.setText("Cease the noise immediately.");
             Transport.send(message);
+            System.out.println("message sent");
         }
-        catch (Exception q) {
+        catch (MessagingException q) {
+            System.out.println(q.getMessage());
             System.out.println("Message failed to send");
         }
 
@@ -52,7 +63,7 @@ public class OspServerChick extends Thread {
 
     private InternetAddress[] recipientAddresses(String[] recipients) {
         ArrayList<InternetAddress> addresses = new ArrayList<>();
-        InternetAddress[] result = new InternetAddress[8];
+        InternetAddress[] result;
 
         for (String recipient : recipients) {
             try {
@@ -62,6 +73,8 @@ public class OspServerChick extends Thread {
                 ; // ignore the failed address
             }
         }
+
+        result = new InternetAddress[addresses.size()];
 
         return addresses.toArray(result);
     }
