@@ -7,6 +7,11 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.BufferedReader;
+import java.net.*;
+import java.util.Collections;
+import java.util.Enumeration;
+
+import static java.lang.System.out;
 
 /**
  * This class will handle the server operations for Osprey.
@@ -41,7 +46,7 @@ public class OspServer {
             emailRecip = recipFile.lines().toArray(String[]::new);
         }
         catch (FileNotFoundException e) {
-            System.out.println("Recipients file not found");
+            out.println("Recipients file not found");
             System.exit(1);
         }
 
@@ -50,6 +55,13 @@ public class OspServer {
             serverSocket = new ServerSocket(portNumber);
         }
         catch (IOException q) {
+            System.exit(1);
+        }
+
+        try {
+            printNetInterfaces();
+        }
+        catch (SocketException e) {
             System.exit(1);
         }
 
@@ -63,7 +75,7 @@ public class OspServer {
             Socket clientSocket = null;
 
             try {
-                System.out.println("Listening");
+                out.println("Listening");
                 clientSocket = serverSocket.accept();
             }
             catch (IOException r) {
@@ -73,5 +85,23 @@ public class OspServer {
             OspServerChick connection = new OspServerChick(clientSocket, sleepTimer, emailRecip);
             connection.start();
         }
+    }
+
+    private static void printNetInterfaces() throws SocketException {
+        Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
+        for (NetworkInterface netint : Collections.list(nets))
+            displayInterfaceInformation(netint);
+
+
+    }
+
+    private static void displayInterfaceInformation(NetworkInterface netint) throws SocketException {
+        out.printf("Display name: %s\n", netint.getDisplayName());
+        out.printf("Name: %s\n", netint.getName());
+        Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
+        for (InetAddress inetAddress : Collections.list(inetAddresses)) {
+            out.printf("InetAddress: %s\n", inetAddress);
+        }
+        out.printf("\n");
     }
 }
