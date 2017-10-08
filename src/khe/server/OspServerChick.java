@@ -51,14 +51,6 @@ public class OspServerChick extends Thread {
             System.out.println("Message failed to send");
         }
 
-
-        // Avoid spamming emails
-        try {
-            Thread.sleep(sleepTimer * 1000 * 60);
-        }
-        catch (InterruptedException e) {
-            System.out.println("Thread interrupted!");
-        }
     }
 
     private InternetAddress[] recipientAddresses(String[] recipients) {
