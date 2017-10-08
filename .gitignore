@@ -55,4 +55,4 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-recip.txt
+out/artifacts/Osprey_jar/recip.txt
