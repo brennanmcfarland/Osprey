@@ -48,13 +48,6 @@ public class OspServer {
             System.exit(1);
         }
 
-        ServerSocket serverSocket = null;
-        try {
-            serverSocket = new ServerSocket(portNumber);
-        }
-        catch (IOException q) {
-            System.exit(1);
-        }
 
         try {
             printNetInterfaces();
@@ -70,7 +63,15 @@ public class OspServer {
         ////////////////////
 
         while (true) {
+            ServerSocket serverSocket = null;
             Socket clientSocket = null;
+
+            try {
+                serverSocket = new ServerSocket(portNumber);
+            }
+            catch (IOException q) {
+                System.exit(1);
+            }
 
             try {
                 out.println("Listening on " + args[0]);
