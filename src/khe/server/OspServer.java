@@ -62,16 +62,17 @@ public class OspServer {
         /* RUNNING SERVER */
         ////////////////////
 
-        while (true) {
-            ServerSocket serverSocket = null;
-            Socket clientSocket = null;
+        ServerSocket serverSocket = null;
+        try {
+            serverSocket = new ServerSocket(portNumber);
+        }
+        catch (IOException q) {
+            System.out.println(q.getMessage());
+            System.exit(1);
+        }
 
-            try {
-                serverSocket = new ServerSocket(portNumber);
-            }
-            catch (IOException q) {
-                System.exit(1);
-            }
+        while (true) {
+            Socket clientSocket = null;
 
             try {
                 out.println("Listening on " + args[0]);
