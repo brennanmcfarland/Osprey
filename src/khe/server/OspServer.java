@@ -75,7 +75,7 @@ public class OspServer {
             Socket clientSocket = null;
 
             try {
-                out.println("Listening");
+                out.println("Listening on " + args[0]);
                 clientSocket = serverSocket.accept();
             }
             catch (IOException r) {
