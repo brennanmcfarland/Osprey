@@ -41,8 +41,7 @@ public class OspServer {
         // Read a text file for recipients in form of <email>\n<email>\n...
         String[] emailRecip = null;
         try {
-            BufferedReader recipFile = new BufferedReader(new FileReader(
-                    "src/khe/server/recip.txt"));
+            BufferedReader recipFile = new BufferedReader(new FileReader("recip.txt"));
             emailRecip = recipFile.lines().toArray(String[]::new);
         }
         catch (FileNotFoundException e) {
