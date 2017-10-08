@@ -78,10 +78,8 @@ public class OspServer {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
                 String res = reader.readLine();
-                System.out.println(res);
 
                 if (res.equals(CommandStrings.loudnessNotification)) {
-                    out.println("same string");
                     OspServerChick connection = new OspServerChick(clientSocket, sleepTimer, emailRecip);
                     connection.start();
                 }
