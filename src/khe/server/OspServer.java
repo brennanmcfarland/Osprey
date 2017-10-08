@@ -1,12 +1,11 @@
 package khe.server;
 
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import protocol.CommandStrings;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.io.BufferedReader;
 import java.net.*;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -76,13 +75,19 @@ public class OspServer {
             try {
                 out.println("Listening on " + args[0]);
                 clientSocket = serverSocket.accept();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+                String res = reader.readLine();
+
+                if (res.equals(CommandStrings.loudnessNotification)) {
+                    OspServerChick connection = new OspServerChick(clientSocket, sleepTimer, emailRecip);
+                    connection.start();
+                }
+
             }
             catch (IOException r) {
                 System.exit(1);
             }
-
-            OspServerChick connection = new OspServerChick(clientSocket, sleepTimer, emailRecip);
-            connection.start();
         }
     }
 
