@@ -31,7 +31,7 @@ public class OspServerChick extends Thread {
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("juandolar6@gmail.com", "osprey123");
+                        return new PasswordAuthentication("juandolar6@gmail.com", "OOPS");
                     }
                 });
 
